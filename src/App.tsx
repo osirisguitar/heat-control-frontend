@@ -1,4 +1,4 @@
-import { PageDashboard } from './pages/page-dashboard';
+import { PageDashboard } from './pages/pageDashboard';
 
 function App() {
   return <PageDashboard />;

@@ -8,17 +8,14 @@ import {
   Grid,
 } from '@mui/material';
 
+import { HeatControl } from '../features/heatControl/components/heatControl'
+
+
 export const PageDashboard = () => {
   return (
     <Grid container spacing={2}>
-      <Grid item xs={4}>
-        <Card variant="outlined">
-          <CardHeader title="Heater Status" />
-          <CardContent>
-            <Box>Bla bla bla</Box>
-            <Button variant="contained">Press</Button>
-          </CardContent>
-        </Card>
+      <Grid item xs={2} md={2}>
+        <HeatControl />
       </Grid>
       <Grid item xs={8}>
         <Card variant="outlined">
