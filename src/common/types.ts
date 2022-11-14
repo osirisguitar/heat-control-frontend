@@ -13,8 +13,25 @@ interface ControlState {
   state: State
 }
 
-export {
+interface Schedule {
+  id?: number,
+  from: string,
+  to: string,
+  state: State
+}
+
+interface ControlSchedule {
+  controlName: string,
+  schedule: Schedule,
+}
+
+export type {
   Control,
-  State,
   ControlState,
+  Schedule,
+  ControlSchedule,
+}
+
+export {
+  State,
 }
