@@ -11,7 +11,6 @@ import {
 import { HeatControl } from '../features/heatControl/components/heatControl'
 import { Schedule } from '../features/schedule/components/schedule'
 
-
 export const PageDashboard = () => {
   return (
     <Grid container spacing={2}>
@@ -19,7 +18,7 @@ export const PageDashboard = () => {
         <HeatControl />
       </Grid>
       <Grid item xs={12} md={10}>
-        <Schedule></Schedule>
+        <Schedule />
       </Grid>
     </Grid>
   );
