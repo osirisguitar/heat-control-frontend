@@ -16,7 +16,7 @@ export function HeatControl() {
   useEffect(() => {
     const timer = setInterval(async () => {
       setControlState(await HeatControlService.getControlState())
-    }, 10000);
+    }, 60000);
     
     // clearing interval
     return () => clearInterval(timer);

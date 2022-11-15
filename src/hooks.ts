@@ -23,13 +23,24 @@ export const useSchedules = () => {
   const get = () => {
     setState((current) => Object.assign({}, current, { isLoading: true }));
     axios
-      .get<ControlSchedule[]>(baseUrl + '/heatcontrol/schedule')
-      .then((res) =>
+      .get(baseUrl + '/heatcontrol/schedule')
+      .then((res) => {
+        const data = res.data.map((schedule: any) => {
+          return {
+            controlName: schedule.control_name,
+            schedule: {
+              id: schedule.rowid,
+              from: schedule.from_date,
+              to: schedule.to_date,
+              state: schedule.state,
+            }
+          }
+        })
         setState((current) =>
-          Object.assign({}, current, { isLoading: false, data: res.data })
+          Object.assign({}, current, { isLoading: false, data: data })
         )
-      );
-  };
+      })
+  }
 
   React.useEffect(() => {
     get();
