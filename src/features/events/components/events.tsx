@@ -3,7 +3,6 @@ import { DateTime } from 'luxon'
 
 import { useSchedules } from '../../../hooks';
 import { ControlSchedule, State } from '../../../common/types';
-import { Schedule } from '../../schedule';
 
 export function Events() {
   const { data, isLoading, isFetching, refetch } = useSchedules();
@@ -11,8 +10,8 @@ export function Events() {
     if (data && data.length > 0) {
       const first = data.sort((a, b) => (a > b ? -1 : 1))[0]
 
-      const from = DateTime.fromFormat(first.schedule.from, "yyyy-MM-dd hh:mm:ss.SSS")
-      const to = DateTime.fromFormat(first.schedule.to, "yyyy-MM-dd hh:mm:ss.SSS")
+      const from = DateTime.fromFormat(first.schedule.from, "yyyy-MM-dd HH:mm:ss.SSS")
+      const to = DateTime.fromFormat(first.schedule.to, "yyyy-MM-dd HH:mm:ss.SSS")
       const scheduleActive = DateTime.now() >= from && DateTime.now() <= to
 
       let nextHeaterState = 'on'
@@ -27,9 +26,9 @@ export function Events() {
         stateChange = from
       }
 
-      const stateChangeString = stateChange.toRelative({ unit: 'hours' })
+      const stateChangeString = stateChange.toRelative({ unit: 'hours' }) + ' at ' + stateChange.toFormat('HH:mm')
 
-      const eventString = `Heat will turn ${nextHeaterState} ${stateChangeString}`
+      const eventString = `Heating will turn ${nextHeaterState} ${stateChangeString}`
       return eventString
     }
 
@@ -37,10 +36,10 @@ export function Events() {
   }
 
   return (
-    <Card>
+    <Card variant="outlined">
       <CardHeader title="Events"/>
       <CardContent>
-        { createEventString(data) }
+        { !isLoading && createEventString(data) }
       </CardContent>
     </Card>
   )

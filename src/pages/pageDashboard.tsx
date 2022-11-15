@@ -18,10 +18,10 @@ export const PageDashboard = () => {
       <Grid item xs={6} md={2}>
         <HeatControl />
       </Grid>
-      <Grid item xs={12} md={4}>
+      <Grid item xs={6} md={4}>
         <Events />
       </Grid>
-      <Grid item xs={12} md={10}>
+      <Grid item xs={12} md={6}>
         <Schedule />
       </Grid>
     </Grid>

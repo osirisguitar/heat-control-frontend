@@ -28,7 +28,7 @@ export function HeatControl() {
       alignItems: 'center',
       flexDirection: "column",
     }}>
-      <CardHeader title="Heater Status" />
+      <CardHeader title="Heating Status" />
       <CardContent>
         <img
           src={`${controlState?.state === State.inactive ? '/src/assets/green-light.png' : '/src/assets/red-light.png'}`}
