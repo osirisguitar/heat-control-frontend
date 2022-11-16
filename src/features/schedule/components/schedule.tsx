@@ -24,7 +24,7 @@ export function Schedule() {
 
   return (
     <Card variant="outlined">
-      <CardHeader title="Schedule (Heating Off)"/>
+      <CardHeader title="Schedule (Heating Off)" />
       <CardContent>
       <Table size="small" aria-label="a dense table">
         <TableHead>

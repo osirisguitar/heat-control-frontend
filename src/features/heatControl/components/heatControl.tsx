@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Box,
-  Button,
   Card,
   CardContent,
   CardHeader,
@@ -14,6 +12,10 @@ export function HeatControl() {
   const[controlState, setControlState] = useState<ControlState>()
 
   useEffect(() => {
+    setTimeout(async () => {
+      setControlState(await HeatControlService.getControlState())
+    }, 10)
+
     const timer = setInterval(async () => {
       setControlState(await HeatControlService.getControlState())
     }, 60000);

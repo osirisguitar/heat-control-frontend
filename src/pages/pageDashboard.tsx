@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 import {
   Box,
   Button,
@@ -6,11 +6,12 @@ import {
   CardContent,
   CardHeader,
   Grid,
-} from '@mui/material';
+} from '@mui/material'
 
 import { HeatControl } from '../features/heatControl'
 import { Schedule } from '../features/schedule'
 import { Events } from '../features/events'
+import { History } from '../features/history'
 
 export const PageDashboard = () => {
   return (
@@ -24,6 +25,9 @@ export const PageDashboard = () => {
       <Grid item xs={12} md={6}>
         <Schedule />
       </Grid>
+      <Grid item xs={12} md={12}>
+        <History />
+      </Grid>
     </Grid>
-  );
-};
+  )
+}
