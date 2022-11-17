@@ -1,11 +1,10 @@
 import { Card, CardHeader, CardContent } from '@mui/material'
 import { DateTime } from 'luxon'
 
-import { usePriceHistory } from '../../../hooks';
 import { ControlSchedule, State } from '../../../common/types';
 
 export function History() {
-  const { data, isLoading, isFetching, refetch } = usePriceHistory();
+  //const { data, isLoading, isFetching, refetch } = usePriceHistory();
 
   return (
     <Card variant="outlined">

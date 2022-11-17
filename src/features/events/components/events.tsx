@@ -53,10 +53,10 @@ const useMyCustomHook = () => {
 
     let relativeString = '(in '
 
-    if (duration.as('hours') > 0) {
+    if (duration.as('hours') > 1) {
       relativeString += Math.round(duration.as('hours')) + ' hours'
     } else {
-      relativeString += duration.as('minutes') + ' minutes'
+      relativeString += Math.round(duration.as('minutes')) + ' minutes'
     }
 
     relativeString += ')'

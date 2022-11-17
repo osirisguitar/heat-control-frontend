@@ -1,24 +1,44 @@
 import React from 'react';
 import axios, { AxiosError } from 'axios';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 
-import { ControlSchedule } from './common/types';
+import { ControlState, ControlSchedule } from './common/types';
 
 const baseUrl = 'http://localhost:8003'
 
-type DataState<T> = {
-  data: T | undefined;
-  isLoading: boolean;
-  error: AxiosError | undefined;
-};
+export const useSchedules = () =>
+  useQuery<ControlSchedule[], AxiosError>({
+    queryKey: ['schedule'], 
+    queryFn: () =>
+      axios.get<ControlSchedule[]>(baseUrl + '/heatcontrol/schedule').then((res) => {
+        const data = res.data.map((schedule: any) => {
+          return {
+            controlName: schedule.control_name,
+            schedule: {
+              id: schedule.rowid,
+              from: schedule.from_date,
+              to: schedule.to_date,
+              state: schedule.state,
+            }
+          }
+        })
 
-const initialState = {
-  data: undefined,
-  isLoading: false,
-  error: undefined,
-};
+        return data
+      }),
+    refetchInterval: 30000
+  });
 
+export const useControlState = () =>
+  useQuery<ControlState, AxiosError>({
+    queryKey: ['controlstate'], 
+    queryFn: () =>
+      axios.get<ControlState>(baseUrl + '/heatcontrol').then((res) => {
+        return res.data
+      }),
+    refetchInterval: 30000
+  });
 
-export const useSchedules = () => {
+/*export const useSchedules = () => {
   const [state, setState] = React.useState<DataState<ControlSchedule[]>>(initialState);
 
   const get = () => {
@@ -48,7 +68,7 @@ export const useSchedules = () => {
   }, []);
 
   return { ...state, isFetching: state.isLoading, refetch: get };
-};
+};*/
 
 /*export const useDeleteSchedule = () => {
   const [state, setState] = React.useState<DataState<ControlSchedule>>(initialState);
@@ -62,7 +82,7 @@ export const useSchedules = () => {
   };
 
   return { mutate, ...state, isFetching: state.isLoading };
-};*/
+};
 
 export const usePriceHistory = () => {
   const [state, setState] = React.useState<DataState<ControlSchedule[]>>(initialState);
@@ -94,4 +114,4 @@ export const usePriceHistory = () => {
   }, []);
 
   return { ...state, isFetching: state.isLoading, refetch: get };
-};
+};*/

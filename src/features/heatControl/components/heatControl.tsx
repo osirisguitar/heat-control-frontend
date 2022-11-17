@@ -6,23 +6,10 @@ import {
 } from '@mui/material';
 
 import { ControlState, State } from '../../../common/types'
-import { HeatControlService } from '../heatControlService'
+import { useControlState } from '../../../hooks';
 
 export function HeatControl() {
-  const[controlState, setControlState] = useState<ControlState>()
-
-  useEffect(() => {
-    setTimeout(async () => {
-      setControlState(await HeatControlService.getControlState())
-    }, 10)
-
-    const timer = setInterval(async () => {
-      setControlState(await HeatControlService.getControlState())
-    }, 60000);
-    
-    // clearing interval
-    return () => clearInterval(timer);
-  });
+  const { data, isLoading, isFetching, refetch } = useControlState();
 
   return (
     <Card variant="outlined" sx={{
@@ -33,7 +20,7 @@ export function HeatControl() {
       <CardHeader title="Heating Status" />
       <CardContent>
         <img
-          src={`${controlState?.state === State.inactive ? '/src/assets/green-light.png' : '/src/assets/red-light.png'}`}
+          src={`${data?.state === State.inactive ? '/src/assets/green-light.png' : '/src/assets/red-light.png'}`}
           alt={'state'}
           width={100}
           loading="lazy"
