@@ -1,11 +1,11 @@
-import { ThemeContext } from '@emotion/react';
-import { Card, CardHeader, CardContent, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, SxProps } from '@mui/material'
+import { Button, Card, CardActions, CardHeader, CardContent, IconButton, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material'
 import { DateTime } from 'luxon'
+import { Delete } from '@mui/icons-material'
 
-import { useSchedules } from '../../../hooks';
+import { useSchedules } from '../../../hooks'
 
 export function Schedule() {
-  const { data, isLoading, isFetching, refetch } = useSchedules();
+  const { data, isLoading, isFetching, refetch } = useSchedules();  
   //  const { mutate: createPet } = useCreatePet();
 
   const formatDate = (dateString: string) : string => {
@@ -19,7 +19,7 @@ export function Schedule() {
     const to = DateTime.fromFormat(toDateString, 'yyyy-MM-dd HH:mm:ss.SSS')
     const now = DateTime.now()
 
-    return now >= from && now <= to ? 'green' : ''
+    return now >= from && now <= to ? 'darkred' : ''
   }
 
   return (
@@ -31,6 +31,7 @@ export function Schedule() {
           <TableRow>
             <TableCell>Start</TableCell>
             <TableCell>End</TableCell>
+            <TableCell>Action</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -45,11 +46,17 @@ export function Schedule() {
               <TableCell>
                 {formatDate(schedule.schedule.to)}
               </TableCell>
+              <TableCell>
+                <IconButton><Delete/></IconButton>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
       </CardContent>
+      <CardActions>
+        <Button>Add Schedule</Button>
+      </CardActions>
     </Card>
   )
 }

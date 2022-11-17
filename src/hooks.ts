@@ -17,6 +17,7 @@ const initialState = {
   error: undefined,
 };
 
+
 export const useSchedules = () => {
   const [state, setState] = React.useState<DataState<ControlSchedule[]>>(initialState);
 
@@ -48,6 +49,20 @@ export const useSchedules = () => {
 
   return { ...state, isFetching: state.isLoading, refetch: get };
 };
+
+/*export const useDeleteSchedule = () => {
+  const [state, setState] = React.useState<DataState<ControlSchedule>>(initialState);
+  const mutate = (schedule: DeleteScheduleRequest) => {
+    setState((current) => Object.assign({}, current, { isLoading: true }));
+    return axios.delete<DeleteScheduleRequest, Schedule>(baseurl + '/heatcontrol/schedule/').then((res) => {
+      setState((current) =>
+        Object.assign({}, current, { isLoading: false, data: res })
+      );
+    });
+  };
+
+  return { mutate, ...state, isFetching: state.isLoading };
+};*/
 
 export const usePriceHistory = () => {
   const [state, setState] = React.useState<DataState<ControlSchedule[]>>(initialState);

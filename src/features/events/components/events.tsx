@@ -1,9 +1,8 @@
 import { Box, Card, CardHeader, CardContent } from '@mui/material'
-import { DateTime } from 'luxon'
+import { DateTime, Duration } from 'luxon'
 
 import { useSchedules } from '../../../hooks';
-import { ControlSchedule, State } from '../../../common/types';
-import { useState } from 'react';
+import { State } from '../../../common/types';
 
 export function Events() {
   const { eventString, relativeString } = useMyCustomHook();
@@ -30,24 +29,38 @@ const useMyCustomHook = () => {
     const scheduleActive = DateTime.now() >= from && DateTime.now() <= to
 
     let nextHeaterState = 'on'
-    let stateChange = DateTime.now()
-    let duration = from.diffNow()
+    let stateChange : DateTime
+    let duration : Duration
     if (scheduleActive) {
       // schedule state is lowered temperature, so opposite of heater state
       nextHeaterState = first.schedule.state === State.active ? 'on' : 'off'
       stateChange = to
-      duration = to.diffNow()
+      duration = to.diff(DateTime.now())
     } else {
       // schedule state is lowered temperature, so opposite of heater state
       nextHeaterState = first.schedule.state === State.active ? 'off' : 'on'
       stateChange = from
-      duration = from.diffNow()
+      duration = from.diff(DateTime.now())
     }
 
-    const stateChangeString = 'at ' + stateChange.toFormat('HH:mm')
+    let stateChangeString = 'at ' + stateChange.toFormat('HH:mm')
+
+    if (stateChange.toRelativeCalendar({ unit: 'days' }) !== 'today') {
+      stateChangeString += ' ' + stateChange.toRelativeCalendar({ unit: 'days' })
+    }
 
     const eventString =`Heating will turn ${nextHeaterState} ${stateChangeString}`
-    const relativeString = (`(in ` + (duration.hours > 0 ? duration.minutes > 30 ? ((duration.hours + 1) + ' hours') : (duration.hours + ' hours') : duration.minutes + ' minutes')) + ')'
+
+    let relativeString = '(in '
+
+    if (duration.as('hours') > 0) {
+      relativeString += Math.round(duration.as('hours')) + ' hours'
+    } else {
+      relativeString += duration.as('minutes') + ' minutes'
+    }
+
+    relativeString += ')'
+
     return { data, isLoading, isFetching, refetch, eventString, relativeString }
   }
 
