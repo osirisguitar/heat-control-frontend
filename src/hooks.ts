@@ -4,18 +4,20 @@ import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 import { ControlState, ControlSchedule } from './common/types';
 
+type AddScheduleRequest = Omit<ControlSchedule, 'id'>;
+
 const baseUrl = 'http://localhost:8003'
 
 export const useSchedules = () =>
   useQuery<ControlSchedule[], AxiosError>({
-    queryKey: ['schedule'], 
+    queryKey: ['schedules'], 
     queryFn: () =>
       axios.get<ControlSchedule[]>(baseUrl + '/heatcontrol/schedule').then((res) => {
         const data = res.data.map((schedule: any) => {
           return {
             controlName: schedule.control_name,
             schedule: {
-              id: schedule.rowid,
+              id: schedule.schedule_id,
               from: schedule.from_date,
               to: schedule.to_date,
               state: schedule.state,
@@ -26,7 +28,34 @@ export const useSchedules = () =>
         return data
       }),
     refetchInterval: 30000
-  });
+  })
+
+export const useScheduleById = ({ id }: { id: Number | undefined }) => {
+  return useQuery<ControlSchedule, AxiosError>(['schedule', id], () =>
+    axios.get<ControlSchedule>(baseUrl + `/heatcontrol/schedule/${id}`).then((res : any) => {
+      res.data = {
+        controlName: res.data.control_name,
+        schedule: {
+          id: res.data.schedule_id,
+          from: res.data.from_date,
+          to: res.data.to_date,
+          state: res.data.state,
+        }
+      }
+
+      return res.data
+    })
+  )
+}
+
+export const useCreateSchedule = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation<ControlSchedule, AxiosError, AddScheduleRequest>(
+    (schedule) => axios.post<AddScheduleRequest, ControlSchedule>(baseUrl + '/heatcontrol/schedule', schedule),
+    { onSuccess: () => queryClient.refetchQueries('schedules') }
+  );
+};
 
 export const useControlState = () =>
   useQuery<ControlState, AxiosError>({

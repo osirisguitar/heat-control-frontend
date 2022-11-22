@@ -1,12 +1,18 @@
 import { Button, Card, CardActions, CardHeader, CardContent, IconButton, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material'
 import { DateTime } from 'luxon'
 import { Delete } from '@mui/icons-material'
+import { useState } from 'react'
+
+import { EditSchedule } from '../'
 
 import { useSchedules } from '../../../hooks'
+import { ControlSchedule } from '../../../common/types'
 
 export function Schedule() {
   const { data, isLoading, isFetching, refetch } = useSchedules();  
-  //  const { mutate: createPet } = useCreatePet();
+
+  const [open, setOpen] = useState<boolean>(false)
+  const [currentSchedule, setCurrentSchedule] = useState<ControlSchedule | null>(null)
 
   const formatDate = (dateString: string) : string => {
     const date = DateTime.fromFormat(dateString, 'yyyy-MM-dd HH:mm:ss.SSS')
@@ -20,6 +26,16 @@ export function Schedule() {
     const now = DateTime.now()
 
     return now >= from && now <= to ? 'darkred' : ''
+  }
+
+  const openSchedule = (schedule : ControlSchedule | null) => {
+    console.log('openSchedule', schedule)
+    setCurrentSchedule(schedule)
+    setOpen(true)
+  }
+
+  const closeSchedule = () => {
+    setOpen(false)
   }
 
   return (
@@ -39,6 +55,7 @@ export function Schedule() {
             <TableRow
               key={schedule.schedule.id}
               sx={{ '&:last-child td, &:last-child th': { border: 0 }, backgroundColor: getStyleByDates(schedule.schedule.from, schedule.schedule.to) }}
+              onClick={() => openSchedule(schedule)}
             >
               <TableCell>
                 {formatDate(schedule.schedule.from)}
@@ -55,7 +72,8 @@ export function Schedule() {
       </Table>
       </CardContent>
       <CardActions>
-        <Button>Add Schedule</Button>
+        <EditSchedule open={open} scheduleId={currentSchedule?.schedule.id} closeDialog={closeSchedule} />
+        <Button onClick={() => { setCurrentSchedule(null); setOpen(true) }}>Add Schedule</Button>
       </CardActions>
     </Card>
   )
