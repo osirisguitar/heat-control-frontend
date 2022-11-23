@@ -73,7 +73,8 @@ export function Schedule() {
       </CardContent>
       <CardActions>
         <EditSchedule open={open} scheduleId={currentSchedule?.schedule.id} closeDialog={closeSchedule} />
-        <Button onClick={() => { setCurrentSchedule(null); setOpen(true) }}>Add Schedule</Button>
+        <Button onClick={() => { setCurrentSchedule(null); setOpen(true) }}>Add Manual Schedule</Button>
+        <Button onClick={() => { setCurrentSchedule(null); setOpen(true) }}>Add Automatic Schedule</Button>
       </CardActions>
     </Card>
   )

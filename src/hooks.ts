@@ -27,12 +27,14 @@ export const useSchedules = () =>
 
         return data
       }),
-    refetchInterval: 30000
+    refetchInterval: 60000
   })
 
-export const useScheduleById = ({ id }: { id: Number | undefined }) => {
-  return useQuery<ControlSchedule, AxiosError>(['schedule', id], () =>
-    axios.get<ControlSchedule>(baseUrl + `/heatcontrol/schedule/${id}`).then((res : any) => {
+export const useScheduleById = ({ id }: { id: Number | undefined }) =>
+  useQuery<ControlSchedule, AxiosError>({
+    queryKey: ['schedule', id], 
+    queryFn: () =>
+      axios.get<ControlSchedule>(baseUrl + `/heatcontrol/schedule/${id}`).then((res : any) => {
       res.data = {
         controlName: res.data.control_name,
         schedule: {
@@ -44,9 +46,9 @@ export const useScheduleById = ({ id }: { id: Number | undefined }) => {
       }
 
       return res.data
-    })
-  )
-}
+    }),
+    enabled: Boolean(id)
+  })
 
 export const useCreateSchedule = () => {
   const queryClient = useQueryClient();
@@ -57,6 +59,21 @@ export const useCreateSchedule = () => {
   );
 };
 
+export const useUpdateSchedule = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation<ControlSchedule, AxiosError, ControlSchedule>(
+    (schedule) => axios.post<ControlSchedule, ControlSchedule>(`${baseUrl}/heatcontrol/schedule/${schedule.schedule.id}`, schedule),
+    { onSuccess: () => queryClient.refetchQueries('schedules') }
+  );
+};
+
+/*export const useDeleteSchedule = () => {
+  return useMutation<>(
+    (schedule) => axios.delete()
+  )
+}*/
+
 export const useControlState = () =>
   useQuery<ControlState, AxiosError>({
     queryKey: ['controlstate'], 
@@ -64,7 +81,7 @@ export const useControlState = () =>
       axios.get<ControlState>(baseUrl + '/heatcontrol').then((res) => {
         return res.data
       }),
-    refetchInterval: 30000
+    refetchInterval: 60000
   });
 
 /*export const useSchedules = () => {
